@@ -1,0 +1,7 @@
+[build]
+  cmd = "go build -o ./tmp/main ./src"
+  bin = "tmp/main"
+  log = "air.log"
+
+[watch]
+  includes = ["./src"]

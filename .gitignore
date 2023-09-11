@@ -1,0 +1,59 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+
+# Architecture-specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+_testmain.go
+
+# IDE files
+.idea/
+*.swp
+*.swo
+
+# Ignore all files in .vscode directory
+.vscode/*
+
+# Do not ignore launch.json in .vscode directory
+!.vscode/launch.json
+
+# macOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Go specific
+bin/
+pkg/
+vendor/
+
+# Log files
+*.log
+
+# Dependency directories (remove the comment below if you want to check in your dependencies)
+# vendor/
+
+# JetBrains IDE
+.idea/
+
+# Binary files produced by `go build`
+*.exe
+*.out
+
+tmp/
+
+.env
