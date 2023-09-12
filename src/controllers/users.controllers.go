@@ -24,9 +24,9 @@ func (ctr *BaseController) UsersRoutes(r *gin.Engine) {
 	api := r.Group("/users")
 	{
 		api.GET("/", func(ctx *gin.Context) {
-			results := models.UsersModel().GetAllUsers()
+			// results := models.UsersModel().GetAllUsers()
 
-			ctx.JSON(200, results)
+			ctx.JSON(200, "results")
 		})
 
 		api.GET("/:id", func(ctx *gin.Context) {

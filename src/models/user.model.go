@@ -3,7 +3,7 @@ package models
 import (
 	"context"
 	"go-boilerplate/src/common"
-	"go-boilerplate/src/core"
+	"go-boilerplate/src/core/db"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,7 +12,7 @@ import (
 func UsersModel() *BaseModel {
 	mod := &BaseModel{
 		ModelConstructor: &common.ModelConstructor{
-			Collection: core.InitMongoDB().Collection("testUsersCollection"),
+			Collection: db.GetMongoDb().Collection("testUsersCollection"),
 		},
 	}
 
@@ -22,7 +22,7 @@ func UsersModel() *BaseModel {
 // models definitions
 
 type User struct {
-	ID       string `form:"name" json:"name"`
+	ID       string `form:"_id" json:"_id"`
 	Name     string `form:"name" json:"name" binding:"required"`
 	Email    string `form:"email" json:"email" binding:"required,email"`
 	Password string `form:"password" json:"password" binding:"required,min=8"`
