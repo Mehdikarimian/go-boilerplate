@@ -14,12 +14,13 @@ func main() {
 	r := gin.Default()
 
 	db.InitRedis(1)
-	db.InitMongoDB()
+	// db.InitMongoDB()
 	db.InitPostgresDB()
 
 	// register controllers
 	controllers.UsersController(r)
 	controllers.ArticlesController(r)
+	controllers.SwaggersController(r)
 
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 
