@@ -15,7 +15,10 @@ func main() {
 
 	db.InitRedis(1)
 	// db.InitMongoDB()
-	db.InitPostgresDB()
+	// db.InitPostgresDB()
+	db.InitGorm()
+
+	// models.MigrateUsers()
 
 	// register controllers
 	controllers.UsersController(r)

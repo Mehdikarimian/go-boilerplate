@@ -2,17 +2,24 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"go-boilerplate/src/common"
 	"go-boilerplate/src/core/db"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+func MigrateUsers() {
+	db.GetGorm().AutoMigrate(&User{})
+}
+
 func UsersModel() *BaseModel {
+	gorm := db.GetGorm()
 	mod := &BaseModel{
 		ModelConstructor: &common.ModelConstructor{
-			Collection: db.GetMongoDb().Collection("testUsersCollection"),
+			Gorm: gorm,
 		},
 	}
 
@@ -22,14 +29,16 @@ func UsersModel() *BaseModel {
 // models definitions
 
 type User struct {
-	ID       string `form:"_id" json:"_id"`
-	Name     string `form:"name" json:"name" binding:"required"`
-	Email    string `form:"email" json:"email" binding:"required,email"`
-	Password string `form:"password" json:"password" binding:"required,min=8"`
+	ID        uint `gorm:"autoIncrement,primaryKey"`
+	Name      string
+	Email     *string
+	Age       uint8
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type UsersFindParam struct {
-	ID string `uri:"id" binding:"required"`
+	ID uint `uri:"id" binding:"required"`
 }
 
 // models methods
@@ -39,8 +48,17 @@ func (mod *BaseModel) GetOneUser(param User) mongo.SingleResult {
 	return *result
 }
 
-func (mod *BaseModel) GetAllUsers() {
+func (mod *BaseModel) GetAllUsers() *User {
+	user := &User{}
 
+	result := mod.Gorm.Table("users").Select("name", "age").Where("name = ?", "Antonio").Scan(&user)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		return nil
+	}
+
+	return user
 }
 
 func (mod *BaseModel) UpdateUser() {
@@ -48,7 +66,7 @@ func (mod *BaseModel) UpdateUser() {
 }
 
 func (mod *BaseModel) CreateUser(body User) {
-	mod.Collection.InsertOne(context.TODO(), bson.M{"name": body.Name, "email": body.Email, "password": body.Password})
+	mod.Collection.InsertOne(context.TODO(), bson.M{"name": body.Name, "email": body.Email, "age": body.Age})
 
 	return
 }

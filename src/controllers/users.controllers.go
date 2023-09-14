@@ -45,9 +45,9 @@ func (ctr *BaseController) UsersRoutes(r *gin.Engine) {
 // @Success      200  {array}  models.User
 // @Router       /users [get]
 func getUsers(ctx *gin.Context, ctr *BaseController) {
-	// results := models.UsersModel().GetAllUsers()
+	results := models.UsersModel().GetAllUsers()
 
-	ctx.JSON(200, "results")
+	ctx.JSON(200, results)
 }
 
 // @Summary      Get An User
