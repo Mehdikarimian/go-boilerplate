@@ -16,10 +16,9 @@ func MigrateUsers() {
 }
 
 func UsersModel() *BaseModel {
-	gorm := db.GetGorm()
 	mod := &BaseModel{
 		ModelConstructor: &common.ModelConstructor{
-			Gorm: gorm,
+			Gorm: db.GetGorm(),
 		},
 	}
 
@@ -32,7 +31,8 @@ type User struct {
 	ID        uint `gorm:"autoIncrement,primaryKey"`
 	Name      string
 	Email     *string
-	Age       uint8
+	LastName  uint8
+	FirstName uint8
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -51,7 +51,7 @@ func (mod *BaseModel) GetOneUser(param User) mongo.SingleResult {
 func (mod *BaseModel) GetAllUsers() *User {
 	user := &User{}
 
-	result := mod.Gorm.Table("users").Select("name", "age").Where("name = ?", "Antonio").Scan(&user)
+	result := mod.Gorm.Table("users").Select("name", "age").Scan(&user)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -66,7 +66,7 @@ func (mod *BaseModel) UpdateUser() {
 }
 
 func (mod *BaseModel) CreateUser(body User) {
-	mod.Collection.InsertOne(context.TODO(), bson.M{"name": body.Name, "email": body.Email, "age": body.Age})
+	mod.Collection.InsertOne(context.TODO(), bson.M{"name": body.Name, "email": body.Email, "lastName": body.LastName})
 
 	return
 }

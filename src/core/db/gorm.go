@@ -3,22 +3,12 @@ package db
 import (
 	"fmt"
 	"log"
-	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var gormdb *gorm.DB
-
-type User struct {
-	ID        uint `gorm:"autoIncrement,primaryKey"`
-	Name      string
-	Email     *string
-	Age       uint8
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
 
 func connectGorm() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
@@ -29,10 +19,15 @@ func connectGorm() (*gorm.DB, error) {
 }
 
 func InitGorm() *gorm.DB {
-	gormdb, err := connectGorm()
+	if gormdb != nil {
+		return gormdb
+	}
+
+	var err error
+	gormdb, err = connectGorm()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
 	return gormdb
