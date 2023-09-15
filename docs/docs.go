@@ -140,6 +140,29 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "List Of users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "limit",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "skip",
+                        "description": "skip",
+                        "name": "skip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "search",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -148,24 +171,6 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.User"
                             }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update An User.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Update An User",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
                         }
                     }
                 }
@@ -179,9 +184,84 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Create An User",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateUserForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get An User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update An User.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update An User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateUserForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.User"
                         }
@@ -197,25 +277,15 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Delete An User",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
                     }
-                }
-            }
-        },
-        "/users/:id": {
-            "get": {
-                "produces": [
-                    "application/json"
                 ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Get An User",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -248,26 +318,52 @@ const docTemplate = `{
                 }
             }
         },
-        "models.User": {
+        "models.CreateUserForm": {
             "type": "object",
             "required": [
-                "email",
-                "name",
-                "password"
+                "Email",
+                "FirstName",
+                "LastName",
+                "Username"
             ],
             "properties": {
-                "_id": {
+                "Email": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "Username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "firstName": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string",
-                    "minLength": 8
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

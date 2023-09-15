@@ -12,21 +12,38 @@ definitions:
       updated_at:
         type: string
     type: object
+  models.CreateUserForm:
+    properties:
+      Email:
+        type: string
+      FirstName:
+        type: string
+      LastName:
+        type: string
+      Username:
+        type: string
+    required:
+    - Email
+    - FirstName
+    - LastName
+    - Username
+    type: object
   models.User:
     properties:
-      _id:
+      createdAt:
         type: string
       email:
         type: string
-      name:
+      firstName:
         type: string
-      password:
-        minLength: 8
+      id:
+        type: integer
+      lastName:
         type: string
-    required:
-    - email
-    - name
-    - password
+      updatedAt:
+        type: string
+      username:
+        type: string
     type: object
 info:
   contact: {}
@@ -108,19 +125,23 @@ paths:
       tags:
       - example
   /users:
-    delete:
-      description: Delete An User.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-      summary: Delete An User
-      tags:
-      - users
     get:
+      parameters:
+      - description: limit
+        format: limit
+        in: query
+        name: limit
+        type: integer
+      - description: skip
+        format: skip
+        in: query
+        name: skip
+        type: integer
+      - description: search
+        format: search
+        in: query
+        name: search
+        type: string
       produces:
       - application/json
       responses:
@@ -135,18 +156,32 @@ paths:
       - users
     post:
       description: Create An User.
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserForm'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.User'
       summary: Create An User
       tags:
       - users
-    put:
-      description: Update An User.
+  /users/{id}:
+    delete:
+      description: Delete An User.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
       produces:
       - application/json
       responses:
@@ -154,11 +189,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.User'
-      summary: Update An User
+      summary: Delete An User
       tags:
       - users
-  /users/:id:
     get:
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
       produces:
       - application/json
       responses:
@@ -167,6 +207,30 @@ paths:
           schema:
             $ref: '#/definitions/models.User'
       summary: Get An User
+      tags:
+      - users
+    put:
+      description: Update An User.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Update An User
       tags:
       - users
 swagger: "2.0"

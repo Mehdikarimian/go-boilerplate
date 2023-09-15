@@ -1,19 +1,11 @@
 package models
 
 import (
-	"context"
 	"fmt"
 	"go-boilerplate/src/common"
 	"go-boilerplate/src/core/db"
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-func MigrateUsers() {
-	db.GetGorm().AutoMigrate(&User{})
-}
 
 func UsersModel() *BaseModel {
 	mod := &BaseModel{
@@ -25,48 +17,101 @@ func UsersModel() *BaseModel {
 	return mod
 }
 
+func MigrateUsers() {
+	db.GetGorm().AutoMigrate(&User{})
+}
+
 // models definitions
 
 type User struct {
-	ID        uint `gorm:"autoIncrement,primaryKey"`
-	Name      string
+	ID        uint   `gorm:"autoIncrement,primaryKey"`
+	Username  string `gorm:"not null,index,unique"`
 	Email     *string
-	LastName  uint8
-	FirstName uint8
+	FirstName string `gorm:"default:''"`
+	LastName  string `gorm:"default:''"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
+type CreateUserForm struct {
+	Username  string `form:"Username" json:"Username" binding:"required"`
+	Email     string `form:"Email" json:"Email" binding:"required"`
+	FirstName string `form:"FirstName" json:"FirstName" binding:"required"`
+	LastName  string `form:"LastName" json:"LastName" binding:"required"`
+}
+
+type UsersResponse struct {
+	Users []User `json:"users"`
+	Count int    `json:"count"`
+}
 type UsersFindParam struct {
 	ID uint `uri:"id" binding:"required"`
 }
 
 // models methods
-func (mod *BaseModel) GetOneUser(param User) mongo.SingleResult {
-	result := mod.Collection.FindOne(context.TODO(), bson.M{"_id": param.ID})
+func (mod *BaseModel) GetOneUser(param UsersFindParam) User {
+	var user User
 
-	return *result
-}
-
-func (mod *BaseModel) GetAllUsers() *User {
-	user := &User{}
-
-	result := mod.Gorm.Table("users").Select("name", "age").Scan(&user)
+	result := mod.Gorm.Limit(1).Where("id = ?", param.ID).Find(&user)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
-		return nil
+		return user
 	}
 
 	return user
 }
 
-func (mod *BaseModel) UpdateUser() {
+func (mod *BaseModel) GetAllUsers(limit int, skip int, search string) ([]User, int) {
+	var users []User
+	var count int
 
+	search = "%" + search + "%"
+
+	result := mod.Gorm.Limit(limit).Offset(skip).Where("email ilike ? OR username ilike ? OR first_name ilike ? OR last_name ilike ?", search, search, search, search).Find(&users)
+
+	mod.Gorm.Raw("SELECT COUNT(id) FROM users WHERE email ilike ? OR username ilike ? OR first_name ilike ? OR last_name ilike ?", search, search, search, search).Scan(&count)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		return nil, 0
+	}
+
+	return users, count
 }
 
-func (mod *BaseModel) CreateUser(body User) {
-	mod.Collection.InsertOne(context.TODO(), bson.M{"name": body.Name, "email": body.Email, "lastName": body.LastName})
+func (mod *BaseModel) UpdateUser(param UsersFindParam, body User) User {
+	body.ID = param.ID
 
-	return
+	result := mod.Gorm.Save(&body)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return body
+}
+
+func (mod *BaseModel) CreateUser(body User) User {
+	result := mod.Gorm.Create(&body)
+
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	return body
+}
+
+func (mod *BaseModel) DeleteUser(param UsersFindParam) bool {
+	var user User
+	user.ID = param.ID
+
+	result := mod.Gorm.Delete(&user)
+
+	fmt.Println(result)
+	if result.Error != nil || result.RowsAffected == 0 {
+		return false
+	}
+
+	return true
 }
