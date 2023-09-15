@@ -12,6 +12,20 @@ definitions:
       updated_at:
         type: string
     type: object
+  models.CreateArticleForm:
+    properties:
+      content:
+        maxLength: 1000
+        minLength: 3
+        type: string
+      title:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - content
+    - title
+    type: object
   models.CreateUserForm:
     properties:
       Email:
@@ -49,8 +63,45 @@ info:
   contact: {}
 paths:
   /articles:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Get Al Articles
+      tags:
+      - article
+    post:
+      description: Create An Article.
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateArticleForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Create An Article
+      tags:
+      - articles
+  /articles/{id}:
     delete:
       description: Delete An Article.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
       produces:
       - application/json
       responses:
@@ -62,43 +113,13 @@ paths:
       tags:
       - articles
     get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Article'
-      summary: Get An Article
-      tags:
-      - article
-    post:
-      description: Create An Article.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Article'
-      summary: Create An Article
-      tags:
-      - articles
-    put:
-      description: Update An Article.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Article'
-      summary: Update An Article
-      tags:
-      - articles
-  /articles/:id:
-    get:
       description: Returns the the article with ID.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
       produces:
       - application/json
       responses:
@@ -107,6 +128,30 @@ paths:
           schema:
             $ref: '#/definitions/models.Article'
       summary: Find a article
+      tags:
+      - articles
+    put:
+      description: Update An Article.
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateArticleForm'
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+      summary: Update An Article
       tags:
       - articles
   /healthcheck:

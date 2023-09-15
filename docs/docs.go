@@ -23,25 +23,7 @@ const docTemplate = `{
                 "tags": [
                     "article"
                 ],
-                "summary": "Get An Article",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Article"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update An Article.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Update An Article",
+                "summary": "Get Al Articles",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -60,6 +42,82 @@ const docTemplate = `{
                     "articles"
                 ],
                 "summary": "Create An Article",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateArticleForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Article"
+                        }
+                    }
+                }
+            }
+        },
+        "/articles/{id}": {
+            "get": {
+                "description": "Returns the the article with ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Find a article",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Article"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update An Article.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "summary": "Update An Article",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateArticleForm"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -78,26 +136,15 @@ const docTemplate = `{
                     "articles"
                 ],
                 "summary": "Delete An Article",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Article"
-                        }
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "id",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
                     }
-                }
-            }
-        },
-        "/articles/:id": {
-            "get": {
-                "description": "Returns the the article with ID.",
-                "produces": [
-                    "application/json"
                 ],
-                "tags": [
-                    "articles"
-                ],
-                "summary": "Find a article",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -315,6 +362,25 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "models.CreateArticleForm": {
+            "type": "object",
+            "required": [
+                "content",
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "minLength": 3
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
                 }
             }
         },

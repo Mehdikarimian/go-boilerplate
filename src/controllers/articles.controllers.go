@@ -45,7 +45,7 @@ func (ctr *BaseController) ArticlesRoutes(r *gin.Engine) {
 	}
 }
 
-// @Summary      Get An Article
+// @Summary      Get Al Articles
 // @Tags         article
 // @Produce      json
 // @Success      200  {object}  models.Article
@@ -66,7 +66,8 @@ func getArticles(ctx *gin.Context, ctr *BaseController) {
 // @Tags         articles
 // @Produce      json
 // @Success      200  {object}  models.Article
-// @Router       /articles/:id [get]
+// @Router       /articles/{id} [get]
+// @Param        id    path    int  false  "id"  Format(id)
 func getArticle(ctx *gin.Context, ctr *BaseController) {
 	id := ctx.Param("id")
 	getID, err := strconv.ParseInt(id, 10, 64)
@@ -107,6 +108,7 @@ func getArticle(ctx *gin.Context, ctr *BaseController) {
 // @Produce      json
 // @Success      200  {object}  models.Article
 // @Router       /articles [post]
+// @Param request body models.CreateArticleForm true "body"
 func createArticle(ctx *gin.Context, ctr *BaseController) {
 	body := utils.GetBody[models.CreateArticleForm](ctx)
 
@@ -125,7 +127,9 @@ func createArticle(ctx *gin.Context, ctr *BaseController) {
 // @Tags         articles
 // @Produce      json
 // @Success      200  {object}  models.Article
-// @Router       /articles [put]
+// @Router       /articles/{id} [put]
+// @Param request body models.CreateArticleForm true "body"
+// @Param        id    path    int  false  "id"  Format(id)
 func updateArticle(ctx *gin.Context, ctr *BaseController) {
 	id := ctx.Param("id")
 	getID, err := strconv.ParseInt(id, 10, 64)
@@ -149,7 +153,8 @@ func updateArticle(ctx *gin.Context, ctr *BaseController) {
 // @Tags         articles
 // @Produce      json
 // @Success      200  {object}  models.Article
-// @Router       /articles [delete]
+// @Router       /articles/{id} [delete]
+// @Param        id    path    int  false  "id"  Format(id)
 func deleteArticle(ctx *gin.Context, ctr *BaseController) {
 	id := ctx.Param("id")
 	getID, err := strconv.ParseInt(id, 10, 64)
