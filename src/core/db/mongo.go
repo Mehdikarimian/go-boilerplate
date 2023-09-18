@@ -32,7 +32,8 @@ func connectMongoDb(connectionString string) (*mongo.Database, error) {
 }
 
 func InitMongoDB() *mongo.Database {
-	client, error := connectMongoDb(config.LoadConfig(("MONGO_CONNECTION_STRING")))
+	var error error
+	client, error = connectMongoDb(config.LoadConfig(("MONGO_CONNECTION_STRING")))
 
 	if error != nil {
 		log.Fatal(error)

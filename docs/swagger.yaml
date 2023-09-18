@@ -26,6 +26,23 @@ definitions:
     - content
     - title
     type: object
+  models.CreateProductForm:
+    properties:
+      content:
+        maxLength: 1000
+        minLength: 3
+        type: string
+      price:
+        type: integer
+      title:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - content
+    - price
+    - title
+    type: object
   models.CreateUserForm:
     properties:
       Email:
@@ -41,6 +58,21 @@ definitions:
     - FirstName
     - LastName
     - Username
+    type: object
+  models.Product:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
     type: object
   models.User:
     properties:
@@ -169,6 +201,114 @@ paths:
       summary: health check
       tags:
       - example
+  /products:
+    get:
+      parameters:
+      - description: limit
+        format: limit
+        in: query
+        name: limit
+        type: integer
+      - description: skip
+        format: skip
+        in: query
+        name: skip
+        type: integer
+      - description: search
+        format: search
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Get All Products
+      tags:
+      - products
+    post:
+      description: Create An Product.
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateProductForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Create An Product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Delete An Product.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Delete An Product
+      tags:
+      - products
+    get:
+      description: Returns the the product with ID.
+      parameters:
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Find a product
+      tags:
+      - products
+    put:
+      description: Update An Product.
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateProductForm'
+      - description: id
+        format: id
+        in: path
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Product'
+      summary: Update An Product
+      tags:
+      - products
   /users:
     get:
       parameters:
