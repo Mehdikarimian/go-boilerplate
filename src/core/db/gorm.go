@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"go-boilerplate/src/config"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -12,7 +13,7 @@ var gormdb *gorm.DB
 
 func connectGorm() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
-		"host=localhost port=5432 user=postgres dbname=go password=postgres sslmode=disable")
+		"host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.LoadConfig("POSTGRES_HOST"), config.LoadConfig("POSTGRES_PORT"), config.LoadConfig("POSTGRES_USER"), config.LoadConfig("POSTGRES_DB_NAME"), config.LoadConfig("POSTGRES_PASSWORD"))
 
 	fmt.Println("connected to " + dsn)
 	return gorm.Open(postgres.Open(dsn), &gorm.Config{})

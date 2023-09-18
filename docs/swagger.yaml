@@ -103,9 +103,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Article'
-      summary: Get Al Articles
+      summary: Get All Articles
       tags:
-      - article
+      - articles
     post:
       description: Create An Article.
       parameters:

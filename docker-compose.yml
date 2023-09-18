@@ -1,0 +1,48 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: 8000
+      GIN_MODE: release
+      MONGO_CONNECTION_STRING: mongodb://mongo:mongo@mongo:27017/
+      MONGO_DB: go
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB_NAME: postgres
+      REDIS_HOST: redis:6379
+      REDIS_PASSWORD: 
+    networks:
+      - go-network
+  redis:
+    hostname: redis
+    image: "redis:latest"
+    networks:
+      - go-network
+    ports:
+      - 6379:6379
+  mongo:
+    hostname: mongo
+    image: "mongo:latest"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - go-network
+  postgres:
+    hostname: postgres
+    image: "postgres:latest"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - go-network
+networks: 
+  go-network:
+    driver: bridge

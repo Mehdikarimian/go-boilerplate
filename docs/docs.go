@@ -21,9 +21,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "article"
+                    "articles"
                 ],
-                "summary": "Get Al Articles",
+                "summary": "Get All Articles",
                 "responses": {
                     "200": {
                         "description": "OK",

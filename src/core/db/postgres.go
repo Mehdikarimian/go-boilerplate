@@ -35,8 +35,9 @@ func ConnectPostgresDB(dataSourceName string) (*gorp.DbMap, error) {
 }
 
 func InitPostgresDB() {
-	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", config.LoadConfig("POSTGRES_USER"), config.LoadConfig("POSTGRES_PASSWORD"), config.LoadConfig("POSTGRES_DB_NAME"))
+	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", config.LoadConfig("POSTGRES_HOST"), config.LoadConfig("POSTGRES_PORT"), config.LoadConfig("POSTGRES_USER"), config.LoadConfig("POSTGRES_PASSWORD"), config.LoadConfig("POSTGRES_DB_NAME"))
 
+	fmt.Println(dbinfo)
 	var err error
 	db, err = ConnectPostgresDB(dbinfo)
 	if err != nil {

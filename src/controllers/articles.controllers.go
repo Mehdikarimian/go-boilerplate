@@ -45,8 +45,8 @@ func (ctr *BaseController) ArticlesRoutes(r *gin.Engine) {
 	}
 }
 
-// @Summary      Get Al Articles
-// @Tags         article
+// @Summary      Get All Articles
+// @Tags         articles
 // @Produce      json
 // @Success      200  {object}  models.Article
 // @Router       /articles [get]
