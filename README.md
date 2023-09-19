@@ -1,4 +1,5 @@
 # go-boilerplate
+![](logo.png)
 
 A great starting point for building RESTful APIs in Go using Gin framework, connecting to a PostgreSQL database with both pure and gorm, MongoDB database, Redis database.
 
