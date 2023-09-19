@@ -76,7 +76,7 @@ func getUsers(ctx *gin.Context, ctr *BaseController) {
 func getUser(ctx *gin.Context, ctr *BaseController) {
 	param := utils.GetParam[models.UsersFindParam](ctx)
 
-	results := models.UsersModel().GetOneUser(models.UsersFindParam{ID: param.ID})
+	results := models.UsersModel().GetOneUser(param.ID)
 
 	if results == (models.User{}) {
 		ctx.JSON(http.StatusNotFound, "User Not Found!")

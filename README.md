@@ -33,8 +33,10 @@ $ go src/main.go Or air
 ```
 
 #### Configuration
-
-# Boilerplate
+Generate Swagger doc files
+```
+$ swag init -d src/
+```
 ### File Structure
     ..
     ├── docs                                            # Document for swagger.
@@ -49,8 +51,12 @@ $ go src/main.go Or air
     │   │         └── base.go                           # Base Controller Structure.
     │   │         └── products.controllers.go           # Products Controller (example).
     │   │         └── swagger.controllers.go            # Swagger Controller
-    │   │         └── users.controllers.go              # Users Article Controller (example).
+    │   │         └── users.controllers.go              # Users Controller (example).
+    │   │         └── auth.controllers.go               # Auth Controller.
     │   │                                               #
+    │   └── middleware                                  # Middlewares
+    │   │         └── jwt.middleware.go                 # jwt Middlewares.
+    |   |                                               #
     │   ├── core                                        # Core Configures
     │   │   └── db                                      # Db Configures 
     │   │       └── gorm.go                             # Gorm (Golang Typeorm) Configure File 
@@ -64,13 +70,16 @@ $ go src/main.go Or air
     │   │   └── cache.model.go                          # Cache Model (example).
     │   │   └── product.model.go                        # Product Model (example).
     │   │   └── user.model.go                           # User Model (example).
+    │   │   └── auth.model.go                           # Auth Model.
     │   │                                               #
     │   ├── utils                                       # Utils.
     │   │   └── http.go                                 # Http Utils
+    │   │   └── token.go                                # Token Utils
     │   │                                               #
     │   ├── main.go                                     # Main File.
-    ├── .env.example                                    # 
-    ├── Dockerfile                                      #
-    ├── docker-compose.yml                              #
-    ├── .air.toml                                       #
+    │   │                                               #
+    ├── .env.example                                    # Enviroment Example File
+    ├── Dockerfile                                      # Dockerfile
+    ├── docker-compose.yml                              # docker compose file
+    ├── .air.toml                                       # air configure
     └── ...

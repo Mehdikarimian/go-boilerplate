@@ -23,6 +23,7 @@ func main() {
 
 	// register controllers
 	controllers.UsersController(r)
+	controllers.AuthController(r)
 	controllers.ArticlesController(r)
 	controllers.ProductsController(r)
 	controllers.SwaggersController(r)

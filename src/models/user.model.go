@@ -5,6 +5,8 @@ import (
 	"go-boilerplate/src/common"
 	"go-boilerplate/src/core/db"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func UsersModel() *BaseModel {
@@ -29,6 +31,7 @@ type User struct {
 	Email     *string
 	FirstName string `gorm:"default:''"`
 	LastName  string `gorm:"default:''"`
+	Password  string `gorm:"not null"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -38,6 +41,7 @@ type CreateUserForm struct {
 	Email     string `form:"Email" json:"Email" binding:"required"`
 	FirstName string `form:"FirstName" json:"FirstName" binding:"required"`
 	LastName  string `form:"LastName" json:"LastName" binding:"required"`
+	Password  string `form:"Password" json:"Password" binding:"required"`
 }
 
 type UsersResponse struct {
@@ -48,11 +52,15 @@ type UsersFindParam struct {
 	ID uint `uri:"id" binding:"required"`
 }
 
+func VerifyPassword(password, hashedPassword string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+
 // models methods
-func (mod *BaseModel) GetOneUser(param UsersFindParam) User {
+func (mod *BaseModel) GetOneUser(userId uint) User {
 	var user User
 
-	result := mod.Gorm.Limit(1).Where("id = ?", param.ID).Find(&user)
+	result := mod.Gorm.Limit(1).Where("id = ?", userId).Find(&user)
 
 	if result.Error != nil {
 		fmt.Println(result.Error)
@@ -93,6 +101,9 @@ func (mod *BaseModel) UpdateUser(param UsersFindParam, body User) User {
 }
 
 func (mod *BaseModel) CreateUser(body User) User {
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	body.Password = string(hashedPassword)
+
 	result := mod.Gorm.Create(&body)
 
 	if result.Error != nil {

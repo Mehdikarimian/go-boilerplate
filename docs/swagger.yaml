@@ -51,13 +51,26 @@ definitions:
         type: string
       LastName:
         type: string
+      Password:
+        type: string
       Username:
         type: string
     required:
     - Email
     - FirstName
     - LastName
+    - Password
     - Username
+    type: object
+  models.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
     type: object
   models.Product:
     properties:
@@ -85,6 +98,8 @@ definitions:
       id:
         type: integer
       lastName:
+        type: string
+      password:
         type: string
       updatedAt:
         type: string
@@ -186,6 +201,43 @@ paths:
       summary: Update An Article
       tags:
       - articles
+  /auth/login:
+    post:
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Login
+      tags:
+      - auth
+  /auth/profile:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      security:
+      - jwtTokenAuth: []
+      summary: Profile
+      tags:
+      - auth
   /healthcheck:
     get:
       consumes:

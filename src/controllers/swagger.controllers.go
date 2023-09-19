@@ -29,6 +29,9 @@ func SwaggersController(r *gin.Engine) *BaseController {
 // @Tags example
 // @Accept json
 // @Produce json
+// @securityDefinitions.apikey jwtTokenAuth
+// @in header
+// @name <YourTokenName>
 // @Success 200 {string} Healthy
 // @Router /healthcheck [get]
 func HealthCheck(g *gin.Context) {
